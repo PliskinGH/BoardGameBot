@@ -1,0 +1,21 @@
+{% load i18n %}
+<div class="board-grid mb-3" style="--columns: {{ grid.columns }};"
+     role="grid" aria-label="{% translate 'Board' %}">
+  <div class="board-grid-heading board-grid-corner" aria-hidden="true"></div>
+  {% for number in grid.column_numbers %}
+  <div class="board-grid-heading" role="columnheader">{{ number }}</div>
+  {% endfor %}
+  {% for row in grid.cells %}
+  <div class="board-grid-heading" role="rowheader">{{ forloop.counter }}</div>
+  {% for cell in row %}
+  <div class="board-cell kind-{{ cell.kind }}{% if cell.tokens %} has-token{% endif %}{% for token in cell.tokens %} token-owner-{{ token.owner }}{% endfor %}"
+       role="gridcell"
+       title="{% blocktranslate with column=cell.column_number row=cell.row_number %}Column {{ column }}, row {{ row }}{% endblocktranslate %}">
+    {% if cell.kind == 'cache' %}<span class="board-marker" aria-hidden="true">C</span>
+    {% elif cell.kind == 'objective' %}<span class="board-marker" aria-hidden="true">★</span>{% endif %}
+    {% if cell.label %}<span class="board-label">{{ cell.label }}</span>{% endif %}
+    {% for token in cell.tokens %}<span class="board-token">{{ token.label }}</span>{% endfor %}
+  </div>
+  {% endfor %}
+  {% endfor %}
+</div>

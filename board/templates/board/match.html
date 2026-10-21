@@ -1,0 +1,38 @@
+{% extends 'core/base.html' %}
+{% load i18n %}
+
+{% block meta %}
+{% translate "Follow this match on the web." as description %}
+{% include 'core/meta.html' with page_title=match_title description=description site_title=site_title %}
+{% endblock %}
+
+{% block content %}
+<nav aria-label="{% translate 'Breadcrumb' %}">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      {% if user.is_authenticated %}
+      <a href="{% url 'board:index' %}">{% translate "Your matches" %}</a>
+      {% else %}
+      {% translate "Your matches" %}
+      {% endif %}
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">{{ match_title }}</li>
+  </ol>
+</nav>
+
+<h1 class="h4 mb-3">
+  {{ match.guild.name }}
+  <span class="text-body-secondary">: {{ match_title }}</span>
+  {% if public_view %}<span class="badge text-bg-secondary">{% translate "Public view" %}</span>{% endif %}
+</h1>
+
+<div id="match-state"
+     data-version="{{ version }}"
+     data-state-url="{{ state_url }}"
+     hx-get="{{ state_url }}"
+     hx-trigger="every 3s [!document.hidden]"
+     hx-swap="innerHTML"
+     hx-include="#state-since">
+  {% include 'board/_state.html' %}
+</div>
+{% endblock %}

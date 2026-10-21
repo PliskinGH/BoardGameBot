@@ -1,0 +1,23 @@
+{% load i18n %}
+{% if seats %}
+<div class="card mb-3">
+  <div class="card-body">
+    <h2 class="h6">{% translate "Seats" %}</h2>
+    <ul class="list-group list-group-flush">
+      {% for seat in seats %}
+      <li class="list-group-item d-flex justify-content-between align-items-center gap-2 px-0">
+        <span>
+          {% if seat.is_active %}<span class="badge text-bg-primary">{% translate "Playing" %}</span>{% endif %}
+          {{ seat.label }}
+          {% if seat.eliminated %}<span class="badge text-bg-secondary">{% translate "Out" %}</span>{% endif %}
+        </span>
+        <span class="text-body-secondary">
+          {% for key, value in seat.counters.items %}{{ key|capfirst }}: {{ value }}{% if not forloop.last %}, {% endif %}{% endfor %}
+          {% if seat.hidden_cards %}{% if seat.counters %}, {% endif %}{% blocktranslate count cards=seat.hidden_cards %}{{ cards }} card{% plural %}{{ cards }} cards{% endblocktranslate %}{% endif %}
+        </span>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endif %}

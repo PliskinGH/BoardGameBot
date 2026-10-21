@@ -1,0 +1,112 @@
+/* Local tweaks over Bootstrap 5.3.8, which is loaded from the jsDelivr CDN. */
+
+:root {
+  --bs-primary: #5865f2;
+  --bs-primary-rgb: 88, 101, 242;
+  --bs-link-color: #5865f2;
+  --bs-link-hover-color: #4752c4;
+}
+
+.badge {
+  font-weight: 500;
+}
+
+.match-state .lead {
+  margin-bottom: 1rem;
+}
+
+.match-state .list-group-item .badge {
+  margin-right: .35rem;
+}
+
+.match-state .list-group-flush > .list-group-item {
+  background: transparent;
+}
+
+/* Grid boards, as shown by games that render a GridView. */
+.board-grid {
+  display: grid;
+  grid-template-columns: 1.75rem repeat(var(--columns), minmax(2rem, 1fr));
+  gap: .3rem;
+  max-width: 32rem;
+}
+
+.board-grid-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bs-secondary-color);
+  font-size: .7rem;
+  font-weight: 600;
+}
+
+.board-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .2rem;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid var(--bs-border-color);
+  border-radius: .35rem;
+  background: var(--bs-body-bg);
+  font-size: .7rem;
+}
+
+.board-cell.kind-hidden {
+  background: repeating-linear-gradient(45deg, #eef0f4 0 4px,
+                                         #f8f9fa 4px 8px);
+}
+
+.board-cell.kind-cache {
+  background: #fff3cd;
+}
+
+.board-cell.kind-objective {
+  background: #d1e7dd;
+}
+
+.board-marker {
+  font-weight: 700;
+}
+
+.board-label {
+  position: absolute;
+  right: .15rem;
+  bottom: .1rem;
+  max-width: 90%;
+  overflow: hidden;
+  color: var(--bs-secondary-color);
+  font-size: .55rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.board-token {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--bs-secondary);
+  color: #fff;
+  font-weight: 700;
+}
+
+.board-cell.token-owner-0 .board-token {
+  background: #5865f2;
+}
+
+.board-cell.token-owner-1 .board-token {
+  background: #e67e22;
+}
+
+.board-cell.token-owner-2 .board-token {
+  background: #2e9e5b;
+}
+
+.board-cell.token-owner-3 .board-token {
+  background: #c0392b;
+}

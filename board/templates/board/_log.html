@@ -1,0 +1,13 @@
+{% load i18n %}
+{% if log %}
+<div class="card mb-3">
+  <div class="card-body">
+    <h2 class="h6">{% translate "Log" %}</h2>
+    <ol class="list-group list-group-flush small" reversed>
+      {% for entry in log reversed %}
+      <li class="list-group-item px-0" data-seq="{{ entry.seq }}">{{ entry.text }}</li>
+      {% endfor %}
+    </ol>
+  </div>
+</div>
+{% endif %}

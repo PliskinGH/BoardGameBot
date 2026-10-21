@@ -1,0 +1,36 @@
+{% load i18n %}
+<div class="match-state" data-version="{{ version }}" data-state-url="{{ state_url }}">
+  {% if not is_setup %}<input type="hidden" id="state-since" name="since" value="{{ version }}">{% endif %}
+
+  {% if is_setup %}
+  <div class="alert alert-info">
+    {% blocktranslate %}Waiting for players: the match starts once every seat is taken.{% endblocktranslate %}
+  </div>
+  <ul class="list-group mb-3">
+    {% for seat in setup_seats %}
+    <li class="list-group-item d-flex justify-content-between align-items-center gap-2">
+      <span>{% blocktranslate with number=seat.number %}Seat {{ number }}{% endblocktranslate %}</span>
+      <span class="text-body-secondary">
+        {% if seat.player %}{{ seat.player }}{% else %}{% translate "Open" %}{% endif %}
+      </span>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="lead">{{ model.status }}</p>
+  {% if grid %}{% include 'board/_grid.html' %}{% endif %}
+  {% include 'board/_seats.html' %}
+  {% if is_finished %}{% include 'board/_standings.html' %}{% endif %}
+  {% endif %}
+
+  {% include 'board/_zones.html' %}
+
+  {% if model.pending %}
+  <div class="alert alert-warning">
+    <span class="fw-semibold">{{ model.pending.label }}</span>
+    <span class="text-body-secondary">{% translate "Waiting for an answer." %}</span>
+  </div>
+  {% endif %}
+
+  {% include 'board/_log.html' %}
+</div>

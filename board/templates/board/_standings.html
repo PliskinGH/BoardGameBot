@@ -1,0 +1,18 @@
+{% load i18n %}
+{% if standings %}
+<div class="card mb-3">
+  <div class="card-body">
+    <h2 class="h6">{% translate "Final standings" %}</h2>
+    <ol class="list-group list-group-flush">
+      {% for row in standings %}
+      <li class="list-group-item d-flex justify-content-between align-items-center gap-2 px-0">
+        <span class="fw-semibold">{{ row.name }}</span>
+        <span class="text-body-secondary">
+          {% for key, value in row.details %}{{ key }}: {{ value }}{% if not forloop.last %}, {% endif %}{% endfor %}
+        </span>
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
+</div>
+{% endif %}

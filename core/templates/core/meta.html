@@ -1,0 +1,11 @@
+{% load i18n %}
+{% blocktranslate with page=page_title site=site_title asvar full_title %}{{ page }} | {{ site }}{% endblocktranslate %}
+<title>{{ full_title }}</title>
+<meta name="title" content="{{ full_title }}">
+<meta name="description" content="{{ description }}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:site_name" content="{{ site_title }}">
+<meta property="og:title" content="{{ full_title }}">
+<meta property="og:description" content="{{ description }}">
+<meta name="twitter:card" content="summary">

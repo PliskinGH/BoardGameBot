@@ -1,0 +1,28 @@
+{% extends 'core/base.html' %}
+{% load i18n %}
+
+{% block meta %}
+{% translate "Log in" as page_title %}
+{% translate "Log in with Discord." as description %}
+{% include 'core/meta.html' with page_title=page_title description=description site_title=site_title %}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h1 class="h4 card-title">{% translate "Log in" %}</h1>
+        {% if discord_enabled %}
+        <a class="btn btn-primary"
+           href="{% url 'core:discord_connect' %}{% if request.GET.next %}?next={{ request.GET.next|urlencode }}{% endif %}">{% translate "Log in with Discord" %}</a>
+        {% else %}
+        <p class="text-body-secondary mb-0">
+          {% blocktranslate %}Discord login is not configured. Set <code>DISCORD_CLIENT_ID</code> and <code>DISCORD_CLIENT_SECRET</code>.{% endblocktranslate %}
+        </p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

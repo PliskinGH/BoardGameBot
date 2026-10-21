@@ -1,0 +1,26 @@
+{% load i18n %}
+{% if zones %}
+<div class="row g-3 mb-3">
+  {% for zone in zones %}
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h2 class="h6 card-title">{{ zone.label }}</h2>
+        {% if zone.cards %}
+        <ul class="list-inline mb-1">
+          {% for card in zone.cards %}
+          <li class="list-inline-item"><span class="badge text-bg-light border">{{ card.label }}</span></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% if zone.hidden_count is not None %}
+        <p class="small text-body-secondary mb-0">{% blocktranslate count cards=zone.hidden_count %}{{ cards }} hidden{% plural %}{{ cards }} hidden{% endblocktranslate %}</p>
+        {% elif not zone.cards %}
+        <p class="small text-body-secondary mb-0">{% translate "Empty" %}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}

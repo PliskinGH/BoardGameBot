@@ -1,0 +1,55 @@
+name: Django CI
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+
+env:
+  SECRET_KEY: ci-secret-key
+  DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/boardgamebot_ci
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: boardgamebot_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10
+        with:
+          version: "0.13.4"
+          python-version: "3.14"
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Type check
+        run: uv run --no-sync mypy
+
+      - name: Check the project
+        run: uv run --no-sync python manage.py check
+
+      - name: Check for missing migrations
+        run: uv run --no-sync python manage.py makemigrations --check --dry-run
+
+      - name: Run tests
+        run: uv run --no-sync python manage.py test

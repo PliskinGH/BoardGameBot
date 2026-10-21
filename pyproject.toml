@@ -1,0 +1,55 @@
+[project]
+name = "boardgamebot"
+version = "0.1.0"
+description = "Generic Discord board-game bot with a web display"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.14"
+dependencies = [
+    "Django>=6.1.2,<6.2",
+    "discord-py>=2.7,<3",
+    "dj-database-url>=3.1.2,<4",
+    "django-guardian>=3.5.2,<4",
+    "psycopg2-binary>=2.9.13,<3",
+    "python-dotenv>=1.2.4,<2",
+    "requests>=2.34,<3",
+    "tzdata>=2026.5,<2027",
+    "uvicorn[standard]>=0.54.0,<0.55",
+    "whitenoise>=6.12.0,<7",
+]
+
+[dependency-groups]
+dev = [
+    "debugpy>=1.8,<2",
+    "django-stubs>=6.1.2,<6.2",
+    "django-stubs-ext>=6.1.2,<6.2",
+    "mypy>=2.4.0,<3",
+]
+
+[tool.uv]
+package = false
+
+[tool.mypy]
+python_version = "3.14"
+plugins = ["mypy_django_plugin.main"]
+disallow_untyped_defs = true
+check_untyped_defs = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+files = ["config", "core", "games", "board", "discordbot"]
+
+[tool.django-stubs]
+django_settings_module = "config.settings"
+
+[[tool.mypy.overrides]]
+module = "games.engine.*"
+strict = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+check_untyped_defs = false
+
+[[tool.mypy.overrides]]
+module = "guardian.*"
+ignore_missing_imports = true

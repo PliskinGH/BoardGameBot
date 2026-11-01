@@ -369,6 +369,7 @@ class IndexServerTests(TestCase):
         session[discord_api.GUILDS_SESSION_KEY] = guilds
         session.save()
 
+    @override_settings(DISCORD_CLIENT_ID='client-id')
     def test_a_managed_server_gets_an_invite(self):
         self._session([{'id': 11, 'name': 'Alpha',
                         'permissions': discord_api.MANAGE_GUILD}])

@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from games.engine.base import GridView, RenderModel
+from bgb_engine.base import GridView, RenderModel
 
 
 def rows(model: RenderModel) -> dict[str, Any] | None:

@@ -6,7 +6,7 @@ from dataclasses import asdict
 from django.test import SimpleTestCase
 
 from games import registry
-from games.engine.base import GameDefinition, IllegalAction, Transition
+from bgb_engine.base import GameDefinition, IllegalAction, Transition
 from games.services.reveals import tokens
 from tests.support import Table, seats
 

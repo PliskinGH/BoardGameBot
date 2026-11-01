@@ -7,7 +7,7 @@ from django.db import transaction
 from django.db.models import Q
 from django.utils import timezone
 
-from games.engine.base import OutboxItem
+from bgb_engine.base import OutboxItem
 from games.models import Match, OutboxMessage, OutboxStatus
 
 BOARD_UPDATE = 'board_update'

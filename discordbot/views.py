@@ -11,7 +11,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from core.models import Player
-from games.engine.base import ActionOption, IllegalAction, Param, RenderModel
+from bgb_engine.base import ActionOption, IllegalAction, Param, RenderModel
 from games.models import Match, MatchStatus, PendingChoice
 from games.services import actions, matches, undo
 from games.services.contexts import definition_for

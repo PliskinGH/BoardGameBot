@@ -1,21 +1,21 @@
 """Tests for the engine primitives, none of which touch the database."""
 
-from django.test import SimpleTestCase
+from unittest import TestCase
 
-from games.engine.base import PendingRef
-from games.engine.primitives.counters import Counters
-from games.engine.primitives.graph import BoardGraph
-from games.engine.primitives.grid import BoardGrid
-from games.engine.primitives.pending import for_seat, is_legal
-from games.engine.primitives.phases import PhaseMachine
-from games.engine.primitives.projection import hand_view
-from games.engine.primitives.rng import rng_for
-from games.engine.primitives.turn import TurnOrder
-from games.engine.primitives.zones import (Card, extract, find, shuffled,
+from bgb_engine.base import PendingRef
+from bgb_engine.primitives.counters import Counters
+from bgb_engine.primitives.graph import BoardGraph
+from bgb_engine.primitives.grid import BoardGrid
+from bgb_engine.primitives.pending import for_seat, is_legal
+from bgb_engine.primitives.phases import PhaseMachine
+from bgb_engine.primitives.projection import hand_view
+from bgb_engine.primitives.rng import rng_for
+from bgb_engine.primitives.turn import TurnOrder
+from bgb_engine.primitives.zones import (Card, extract, find, shuffled,
                                            take)
 
 
-class RngTests(SimpleTestCase):
+class RngTests(TestCase):
     def test_the_same_seed_draws_the_same_numbers(self):
         first, second = rng_for(3, 'deal'), rng_for(3, 'deal')
         self.assertEqual([first.random() for _ in range(3)],
@@ -26,7 +26,7 @@ class RngTests(SimpleTestCase):
                             rng_for(3, 'other').random())
 
 
-class PhaseTests(SimpleTestCase):
+class PhaseTests(TestCase):
     def test_the_machine_walks_its_phases(self):
         machine = PhaseMachine(('play', 'finished'))
         self.assertEqual(machine.first, 'play')
@@ -45,7 +45,7 @@ class PhaseTests(SimpleTestCase):
             PhaseMachine(('play',)).next('nope')
 
 
-class ZoneTests(SimpleTestCase):
+class ZoneTests(TestCase):
     def setUp(self):
         self.cards = [Card(id=f'c{index}', value=index) for index in range(6)]
 
@@ -76,7 +76,7 @@ class ZoneTests(SimpleTestCase):
             extract(self.cards, 'nope')
 
 
-class GraphTests(SimpleTestCase):
+class GraphTests(TestCase):
     def setUp(self):
         self.graph = BoardGraph(nodes=('a', 'b', 'c', 'd'),
                                 edges=(('a', 'b'), ('b', 'c')))
@@ -98,7 +98,7 @@ class GraphTests(SimpleTestCase):
             BoardGraph(nodes=('a', 'a'))
 
 
-class GridTests(SimpleTestCase):
+class GridTests(TestCase):
     def test_a_square_grid_has_four_neighbours(self):
         grid = BoardGrid(columns=3, rows=3)
         self.assertEqual(set(grid.neighbours(1, 1)),
@@ -119,7 +119,7 @@ class GridTests(SimpleTestCase):
             BoardGrid(columns=0, rows=1)
 
 
-class CounterTests(SimpleTestCase):
+class CounterTests(TestCase):
     def setUp(self):
         self.counters = Counters({'coins': (1, 2)})
 
@@ -151,7 +151,7 @@ class CounterTests(SimpleTestCase):
             self.counters.get('gems', 0)
 
 
-class TurnTests(SimpleTestCase):
+class TurnTests(TestCase):
     def test_turns_wrap_around(self):
         self.assertEqual(TurnOrder((1, 2, 3)).after(3), 1)
 
@@ -166,7 +166,7 @@ class TurnTests(SimpleTestCase):
             TurnOrder((0, 1)).after(5)
 
 
-class PendingTests(SimpleTestCase):
+class PendingTests(TestCase):
     def setUp(self):
         self.choice = PendingRef(seat=1, kind='pick', options=(1, 2))
 
@@ -179,7 +179,7 @@ class PendingTests(SimpleTestCase):
         self.assertFalse(is_legal(self.choice, 3))
 
 
-class ProjectionTests(SimpleTestCase):
+class ProjectionTests(TestCase):
     def setUp(self):
         self.cards = (Card(id='c1'), Card(id='c2'))
 

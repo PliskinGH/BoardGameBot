@@ -8,7 +8,7 @@ from django.utils import translation
 
 from board.renderers import grid, seats, standings, zones
 from games.services import log
-from games.engine.base import (CardView, CellView, GridView, RenderModel,
+from bgb_engine.base import (CardView, CellView, GridView, RenderModel,
                                SeatView, TokenView, ZoneView)
 from games.services import undo
 from games.services.matches import close_match

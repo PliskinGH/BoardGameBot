@@ -4,7 +4,7 @@ from discord import Interaction, app_commands
 from django.utils.translation import gettext_lazy as _
 
 from games import registry
-from games.engine.base import GameDefinition
+from bgb_engine.base import GameDefinition
 from games.models import Match, MatchStatus
 from games.services.errors import UnknownGame
 

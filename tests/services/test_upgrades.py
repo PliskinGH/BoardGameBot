@@ -4,8 +4,8 @@ from unittest import mock
 
 from django.test import TestCase
 
-from games.engine.base import Setup
-from games.engine.card_sample.definition import CardSampleGame
+from bgb_engine.base import Setup
+from bgb_engine.examples.card_sample.definition import CardSampleGame
 from games.models import MatchStatus
 from core import permissions
 from games.services import actions, matches, undo, upgrades

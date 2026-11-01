@@ -5,7 +5,7 @@ from dataclasses import asdict
 
 from django.test import SimpleTestCase
 
-from games.engine.base import (Action, ActionOption, IllegalAction, LogEntry,
+from bgb_engine.base import (Action, ActionOption, IllegalAction, LogEntry,
                                OutboxItem, Param, PendingRef, PendingSpec,
                                RenderModel, Setup, Transition)
 

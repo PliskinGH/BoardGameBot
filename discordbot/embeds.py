@@ -7,7 +7,7 @@ import discord
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext_lazy as _n
 
-from games.engine.base import RenderModel
+from bgb_engine.base import RenderModel
 from games.models import Match, MatchStatus, PendingChoice
 from games.services.matches import match_title
 

@@ -9,7 +9,7 @@ from django.test import (SimpleTestCase, TestCase, TransactionTestCase,
 from discordbot import errors, views
 from games.models import MatchStatus
 from games.services import matches
-from games.engine.base import ActionOption, Param, RenderModel
+from bgb_engine.base import ActionOption, Param, RenderModel
 from games.services.errors import UndoForbidden
 from tests.discordbot.fakes import (bot_match, discord_player,
                                     interaction_for, mark_hand, setup_match)

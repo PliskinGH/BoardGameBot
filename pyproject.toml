@@ -1,11 +1,12 @@
 [project]
 name = "boardgamebot"
 version = "0.1.0"
-description = "Generic Discord board-game bot with a web display"
+description = "Discord bot for asynchronous turn-based board games with a live web display"
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.14"
 dependencies = [
+    "bgb-engine>=0.1,<0.2",
     "Django>=6.1.2,<6.2",
     "discord-py>=2.7,<3",
     "dj-database-url>=3.1.2,<4",
@@ -29,6 +30,12 @@ dev = [
 [tool.uv]
 package = false
 
+[tool.uv.workspace]
+members = ["packages/bgb-engine"]
+
+[tool.uv.sources]
+bgb-engine = { workspace = true }
+
 [tool.mypy]
 python_version = "3.14"
 plugins = ["mypy_django_plugin.main"]
@@ -36,13 +43,13 @@ disallow_untyped_defs = true
 check_untyped_defs = true
 warn_unused_ignores = true
 warn_redundant_casts = true
-files = ["config", "core", "games", "board", "discordbot"]
+files = ["config", "core", "games", "board", "discordbot", "packages/bgb-engine/src"]
 
 [tool.django-stubs]
 django_settings_module = "config.settings"
 
 [[tool.mypy.overrides]]
-module = "games.engine.*"
+module = "bgb_engine.*"
 strict = true
 
 [[tool.mypy.overrides]]

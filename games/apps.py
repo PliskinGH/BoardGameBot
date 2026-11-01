@@ -6,6 +6,6 @@ class GamesConfig(AppConfig):
     name = 'games'
 
     def ready(self) -> None:
-        from .builtin import install
+        from .plugins import install_plugins
 
-        install()
+        install_plugins()

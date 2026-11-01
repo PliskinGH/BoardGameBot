@@ -3,7 +3,7 @@
 from typing import Any
 
 from core.models import Player
-from games.engine.base import Context, GameDefinition, RenderModel
+from bgb_engine.base import Context, GameDefinition, RenderModel
 from games.models import Match
 
 from .contexts import context_for, definition_for

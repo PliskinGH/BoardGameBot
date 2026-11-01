@@ -1,6 +1,6 @@
 # BoardGameBot
 
-A Discord bot for turn-based board games, with a web page that shows each table and lets a server share a match outside Discord.
+A Discord bot for asynchronous, turn-based board games, with a web page that shows each table and lets a server share a match outside Discord.
 
 ## What it does
 
@@ -8,7 +8,11 @@ A Discord bot for turn-based board games, with a web page that shows each table 
 - Posts the live board message for each match, with buttons to join, leave, start, close, take a turn, undo and open private information; a new active player is pinged when the board is replaced.
 - Keeps an action log, undo, and a final recap.
 - Shows the table on the web; a server can make its matches public for visitors.
-- Includes Card Sample Game and Grid Sample Game as examples.
+- Includes Card Sample Game and Grid Sample Game as sample games.
+
+## Engine package
+
+The game engine is the separate MIT package [`bgb-engine`](packages/bgb-engine).
 
 ## Discord commands
 

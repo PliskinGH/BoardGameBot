@@ -1,22 +1,23 @@
 """A minimal numbered-card scoring game, written to exercise the framework.
 
-CardSampleGame is not meant to ship: it uses hands, shared hidden state,
-counters, phases, turn order and a pending choice, which is the surface a real
-game needs. It is an original sample, not an adaptation of a published game.
+CardSampleGame uses hands, shared hidden state, counters, phases, turn order
+and a pending choice, which is the surface a real game needs. It is an
+original sample, not an adaptation of a published game.
 """
 
 import copy
 from typing import Any
 
-from ..base import (Action, ActionOption, CardView, Context, IllegalAction,
-                    LogEntry, OutboxItem, Param, PendingSpec, PendingView,
-                    RenderModel, SeatRef, SeatView, Setup, Transition, ZoneView)
-from ..primitives.counters import Counters
-from ..primitives.pending import for_seat
-from ..primitives.phases import PhaseMachine
-from ..primitives.projection import hand_view
-from ..primitives.turn import TurnOrder
-from ..primitives.zones import Card, find, shuffled
+from ...base import (Action, ActionOption, CardView, Context, IllegalAction,
+                     LogEntry, OutboxItem, Param, PendingSpec, PendingView,
+                     RenderModel, SeatRef, SeatView, Setup, Transition,
+                     ZoneView)
+from ...primitives.counters import Counters
+from ...primitives.pending import for_seat
+from ...primitives.phases import PhaseMachine
+from ...primitives.projection import hand_view
+from ...primitives.turn import TurnOrder
+from ...primitives.zones import Card, find, shuffled
 
 PHASES = PhaseMachine(('play', 'finished'))
 DECK_VALUES = (0, 1, 2, 3, 4, 5)

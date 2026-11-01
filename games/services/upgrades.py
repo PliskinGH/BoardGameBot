@@ -3,7 +3,7 @@
 from django.db import transaction
 
 from core.models import Player
-from games.engine.base import Setup, UpgradableRules
+from bgb_engine.base import Setup, UpgradableRules
 from games.models import Action, ActionSnapshot, Match, MatchStatus
 from . import notifier
 

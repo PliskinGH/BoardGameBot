@@ -5,7 +5,7 @@ from typing import Any
 
 from django.utils import timezone
 
-from games.engine.base import PendingSpec
+from bgb_engine.base import PendingSpec
 from games.models import Match, PendingChoice, Seat
 
 

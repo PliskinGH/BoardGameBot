@@ -1,10 +1,9 @@
-"""Tests for the game registry."""
+"""Tests for game entry-point discovery and the registry."""
 
 from django.test import SimpleTestCase
 
-from games import builtin, registry
-from games.engine.card_sample.definition import CardSampleGame
-from games.engine.grid_sample.definition import GridSampleGame
+from bgb_engine.examples import CardSampleGame, GridSampleGame
+from games import plugins, registry
 
 
 class RegistryTests(SimpleTestCase):
@@ -15,9 +14,10 @@ class RegistryTests(SimpleTestCase):
         self.assertIsInstance(registry.get('grid-sample-game'),
                               GridSampleGame)
 
-    def test_the_registry_lists_the_builtin_games(self):
-        self.assertEqual(list(registry.available()),
-                         ['card-sample-game', 'grid-sample-game'])
+    def test_the_registry_lists_the_installed_games(self):
+        available = registry.available()
+        self.assertIn('card-sample-game', available)
+        self.assertIn('grid-sample-game', available)
 
     def test_an_unknown_slug_is_refused(self):
         with self.assertRaises(LookupError):
@@ -27,8 +27,8 @@ class RegistryTests(SimpleTestCase):
         with self.assertRaises(ValueError):
             registry.register(CardSampleGame())
 
-    def test_installing_the_builtins_twice_is_harmless(self):
-        builtin.install()
-        builtin.install()
+    def test_installing_the_plugins_twice_is_harmless(self):
+        plugins.install_plugins()
+        plugins.install_plugins()
         self.assertIsInstance(registry.get('card-sample-game'), CardSampleGame)
 

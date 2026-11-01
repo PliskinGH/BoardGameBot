@@ -7,7 +7,7 @@ from django.db import transaction
 from django.utils import timezone
 
 from core.models import Guild, Player
-from games.engine.base import OutboxItem
+from bgb_engine.base import OutboxItem
 from games.models import (Action, ActionSnapshot, Match, MatchStatus, Seat,
                           UndoPolicy)
 from . import notifier

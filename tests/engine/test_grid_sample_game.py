@@ -5,8 +5,8 @@ from dataclasses import asdict
 
 from django.test import SimpleTestCase
 
-from games.engine.base import GridView, IllegalAction
-from games.engine.grid_sample.definition import GridSampleGame
+from bgb_engine.base import GridView, IllegalAction
+from bgb_engine.examples.grid_sample.definition import GridSampleGame
 from tests.support import Table, seats
 
 

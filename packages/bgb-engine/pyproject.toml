@@ -1,0 +1,41 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "bgb-engine"
+version = "0.1.0"
+description = "BoardGameBot engine for asynchronous turn-based board games on Discord"
+readme = "README.md"
+requires-python = ">=3.14"
+license = { text = "MIT" }
+keywords = [
+    "boardgamebot",
+    "board game",
+    "asynchronous",
+    "turn-based",
+    "play-by-post",
+    "discord",
+    "discord bot",
+    "board game engine",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Games/Entertainment :: Board Games",
+    "Topic :: Communications :: Chat",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+dependencies = []
+
+[project.entry-points."boardgamebot.games"]
+card-sample = "bgb_engine.examples.card_sample:CardSampleGame"
+grid-sample = "bgb_engine.examples.grid_sample:GridSampleGame"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/bgb_engine"]

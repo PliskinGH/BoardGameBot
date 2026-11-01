@@ -3,12 +3,12 @@
 import copy
 from typing import Any
 
-from ..base import (Action, ActionOption, CellView, Context, GridView,
-                    IllegalAction, LogEntry, OutboxItem, Param, RenderModel,
-                    SeatRef, SeatView, Setup, TokenView, Transition)
-from ..primitives.grid import BoardGrid
-from ..primitives.rng import rng_for
-from ..primitives.turn import TurnOrder
+from ...base import (Action, ActionOption, CellView, Context, GridView,
+                     IllegalAction, LogEntry, OutboxItem, Param, RenderModel,
+                     SeatRef, SeatView, Setup, TokenView, Transition)
+from ...primitives.grid import BoardGrid
+from ...primitives.rng import rng_for
+from ...primitives.turn import TurnOrder
 
 COLUMNS = 7
 ROWS = 7

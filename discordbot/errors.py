@@ -2,7 +2,7 @@
 
 from django.utils.translation import gettext_lazy as _
 
-from games.engine.base import IllegalAction
+from bgb_engine.base import IllegalAction
 from games.services.errors import (AlreadySeated, MatchClosed, MatchFull,
                                    NotASeat, NotHost, NothingToUndo,
                                    NotYourAction,

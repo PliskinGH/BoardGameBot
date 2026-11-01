@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from games.engine.base import Transition
+from bgb_engine.base import Transition
 
 
 def tokens(value: Any) -> set[str]:

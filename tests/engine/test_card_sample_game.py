@@ -5,8 +5,8 @@ from dataclasses import asdict
 
 from django.test import SimpleTestCase
 
-from games.engine.base import IllegalAction
-from games.engine.card_sample.definition import CardSampleGame
+from bgb_engine.base import IllegalAction
+from bgb_engine.examples.card_sample.definition import CardSampleGame
 from tests.support import Table, seats
 
 

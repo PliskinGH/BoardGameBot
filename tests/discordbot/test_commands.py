@@ -8,7 +8,7 @@ from django.test import TransactionTestCase, override_settings
 from core import permissions
 from discordbot.choices import match_label
 from discordbot.cogs.match import MatchCog, game_autocomplete, match_autocomplete
-from games.engine.card_sample.definition import CardSampleGame
+from bgb_engine.examples.card_sample.definition import CardSampleGame
 from games.models import Match, MatchStatus, UndoPolicy
 from games.services import matches
 from tests.discordbot.fakes import (FakeGuild, FakeInteraction, FakeUser,

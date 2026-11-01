@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from games.engine.base import RenderModel
+from bgb_engine.base import RenderModel
 
 
 def rows(model: RenderModel) -> list[dict[str, Any]]:

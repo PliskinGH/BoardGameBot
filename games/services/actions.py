@@ -7,7 +7,7 @@ from django.db import transaction
 from django.utils import timezone
 
 from core.models import Player
-from games.engine.base import Action as EngineAction
+from bgb_engine.base import Action as EngineAction
 from games.models import (Action, ActionSnapshot, Match, MatchStatus, Seat)
 from . import notifier
 

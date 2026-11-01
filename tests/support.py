@@ -6,7 +6,7 @@ from unittest import mock
 from asgiref.sync import sync_to_async
 from django.db import connections
 
-from games.engine.base import Action, Context, PendingRef, SeatRef
+from bgb_engine.base import Action, Context, PendingRef, SeatRef
 
 
 def seats(count: int) -> tuple[SeatRef, ...]:

@@ -2,7 +2,7 @@
 
 from django.test import SimpleTestCase
 
-from games.engine.base import Transition
+from bgb_engine.base import Transition
 from games.services.reveals import detect
 
 

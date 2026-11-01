@@ -3,7 +3,7 @@
 from collections.abc import Iterable
 
 from games import registry
-from games.engine.base import Context, GameDefinition, PendingRef, SeatRef
+from bgb_engine.base import Context, GameDefinition, PendingRef, SeatRef
 from games.models import Match, Seat
 
 from .errors import UnknownGame

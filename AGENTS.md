@@ -1,6 +1,11 @@
 # BoardGameBot — developer guide
 
-BoardGameBot runs turn-based board games in a Discord channel and shows each table on a Django web page. The README covers playing and hosting; this guide covers the code.
+BoardGameBot runs asynchronous, turn-based board games in a Discord channel and shows each table on a Django web page. The README covers playing and hosting; this guide covers the code.
+
+## Documentation and content rules
+
+- The README is for users and hosts. Developer-only material belongs in this guide or a future `CONTRIBUTING.md`.
+- Only the sample games may be named in this repository. Do not add rulebooks, copied card text, card art, board art, scans or official branding from another game.
 
 ## What exists
 
@@ -10,8 +15,9 @@ BoardGameBot runs turn-based board games in a Discord channel and shows each tab
 - A web display with Discord login: the player's matches and managed servers, a live match page with match names and final standings, and a public display mode for servers that opt in.
 - Per-match hosts (the player who opens a table) and per-server managers (guardian object permissions), including force-undo audit and manager grants.
 - Snapshot retention (`prune_snapshots`) and Django admin pages for servers, players, matches, actions and queued posts.
-- `CardSampleGame`, the original numbered-card sample, registered in `games/builtin.py`.
-- `GridSampleGame`, the 7×7 exploration sample with a web-only board, registered in `games/builtin.py`.
+- `CardSampleGame`, the original numbered-card sample, provided by the `card-sample` plugin entry point.
+- `GridSampleGame`, the 7×7 exploration sample with a web-only board, provided by the `grid-sample` plugin entry point.
+- A publishable `bgb-engine` workspace package with the game contract, primitives and reference plugins.
 
 ## What remains
 
@@ -22,6 +28,7 @@ BoardGameBot runs turn-based board games in a Discord channel and shows each tab
 
 - Python 3.14, Django 6.1, PostgreSQL, uvicorn (ASGI, `--lifespan off`), discord.py, django-guardian, WhiteNoise.
 - Dependencies and the virtual environment are managed with [uv](https://docs.astral.sh/uv/); `pyproject.toml` and `uv.lock` are the source of truth. The dev group contains mypy, django-stubs and debugpy.
+- The engine is the `bgb-engine` workspace member under `packages/bgb-engine`; its reference games are installed as `boardgamebot.games` entry points.
 
 ## Local setup
 
@@ -46,7 +53,9 @@ uv run --no-sync python manage.py runbot
 uv run --no-sync mypy
 uv run --no-sync python manage.py check
 uv run --no-sync python manage.py makemigrations --check --dry-run
+uv run --no-sync python -m unittest discover -s packages/bgb-engine/tests
 uv run --no-sync python manage.py test --noinput
+uv build --package bgb-engine -o dist/bgb-engine
 ```
 
 The test runner builds and drops a test database from the migration files. `tests.support.NoNetworkMixin` blocks HTTP and `NoDiscordMixin` blocks Discord; the latter also closes the ORM thread connection at teardown.
@@ -57,10 +66,11 @@ The test runner builds and drops a test database from the migration files. `test
 | --- | --- |
 | `config` | settings, URLs, ASGI application |
 | `core` | `Player`, `Guild`, Discord OAuth, guardian helpers, admin, templates |
-| `games` | models, engine and primitives, services, registry, `prune_snapshots` |
+| `games` | models, services, registry, plugin discovery, `prune_snapshots` |
 | `board` | read-only display: queries, renderers, views, templates |
 | `discordbot` | bot, cogs, panels/views, embeds, outbox worker, `runbot` |
-| `tests` | engine, services, board, core, discordbot, factories, support |
+| `packages/bgb-engine` | publishable `bgb_engine` contract, primitives and reference plugins |
+| `tests` | host integration, services, board, core, discordbot, factories, support |
 
 ## Architecture
 
@@ -79,22 +89,23 @@ The test runner builds and drops a test database from the migration files. `test
 
 ## Database and migrations
 
-- Project migrations are `core/0001_initial.py`, `games/0001_initial.py` and `games/0002_match_last_needed_seats_match_name_seat_display_name.py`; guardian ships its own package migrations. There are no data migrations.
+- Project migrations are `core/0001_initial.py` and `games/0001_initial.py`; guardian ships its own package migrations. There are no data migrations.
 - The test runner applies the migration files to a fresh test database, which is how migration changes are exercised.
 - Model changes are captured with `makemigrations`; migrations to a shared database are applied by its operator.
 
 ## Games and engine
 
-- A game implements `games.engine.base.GameDefinition` and returns a `Transition` from `apply`. Primitives live in `games.engine.primitives`: phases, zones and cards, graph, grid, counters, turn order, pending lookups, seeded randomness and projection.
+- A game implements `bgb_engine.base.GameDefinition` and returns a `Transition` from `apply`. Primitives live in `bgb_engine.primitives`: phases, zones and cards, graph, grid, counters, turn order, pending lookups, seeded randomness and projection.
 - `tests/games/test_contract.py` runs every registered game through setup reproducibility, JSON shapes, legal actions, visibility and deterministic replay.
 - A match stores the rules version it was created with; actions refuse to run under other rules, and `upgrade_match` rebuilds a match before start or asks an `UpgradableRules` definition to migrate it in flight.
-- Add a game under `games/engine/<slug>/definition.py` and register it in `games/builtin.py`; its data is JSON, so no model migration is needed.
-- `games/engine/card_sample/` is `CardSampleGame`: hands, a hidden deck, counters, phases, a pending choice and a reveal/undo path.
-- `games/engine/grid_sample/` is `GridSampleGame`: a 7×7 board, secret caches, unmarked objective starts, and the grid renderer it feeds on the web.
+- Games are installed as entry points in the `boardgamebot.games` group. `games.plugins` validates instances, classes and zero-argument factories; `GamesConfig.ready()` registers them. There is no static built-in game list.
+- `bgb_engine.examples.card_sample` is `CardSampleGame`: hands, a hidden deck, counters, phases, a pending choice and a reveal/undo path.
+- `bgb_engine.examples.grid_sample` is `GridSampleGame`: a 7×7 board, secret caches, unmarked objective starts, and the grid renderer it feeds on the web.
+- The engine package is published separately as `bgb-engine`; `bgb_engine` must not import Django, Discord or the host application.
 
 ## Deployment
 
 - Two processes: the web ASGI process (`uvicorn config.asgi:application --lifespan off`) and the bot (`python manage.py runbot`, which also runs the outbox worker).
 - `Procfile` declares `web`, `worker`, and a release `migrate`; `collectstatic` belongs in the build; WhiteNoise serves `staticfiles/`.
 - `SECRET_KEY` is required when `DEBUG` is off; `ALLOWED_HOSTS`, `DATABASE_URL`, the OAuth variables and `WEB_BASE_URL` configure the instance.
-- CI (`.github/workflows/django.yml`) installs uv, runs `uv sync --locked`, mypy, check, the migrations check and tests against PostgreSQL 17.
+- CI is split: `.github/workflows/django.yml` runs the Django gates against PostgreSQL 17; `.github/workflows/engine.yml` runs the engine checks, builds `bgb-engine`, and publishes a `bgb-engine-v<version>` tag with PyPI trusted publishing.

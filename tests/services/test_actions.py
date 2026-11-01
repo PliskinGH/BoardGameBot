@@ -4,7 +4,7 @@ from unittest import mock
 
 from django.test import TestCase
 
-from games.engine.base import IllegalAction
+from bgb_engine.base import IllegalAction
 from games.models import Action, MatchStatus, OutboxMessage, PendingChoice
 from games.services import actions, matches
 from games.services.errors import MatchClosed, NotASeat, StaleMatch

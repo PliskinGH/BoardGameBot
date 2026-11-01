@@ -93,17 +93,20 @@ def pending_choice(match: Match) -> PendingChoice | None:
             .select_related('seat__player').order_by('pk').first())
 
 def needed_seats(match: Match) -> set[int]:
-    """Return the seats that still have to act in this match."""
+    """Return the seats that still have to act in this match.
+
+    An open choice takes precedence: while any choice is pending, only its
+    seat is needed; otherwise the active seat is needed.
+    """
     if match.status != MatchStatus.ACTIVE:
         return set()
-    positions = set()
-    active = match.active_seat
-    if active is not None:
-        positions.add(active.position)
-    positions.update(
+    pending = set(
         match.pending_choices.filter(resolved_at__isnull=True)
         .values_list('seat__position', flat=True))
-    return positions
+    if pending:
+        return pending
+    active = match.active_seat
+    return {active.position} if active is not None else set()
 
 
 def turn_mentions(match: Match, positions: set[int]) -> str:
@@ -120,7 +123,7 @@ def turn_mentions(match: Match, positions: set[int]) -> str:
     if not mentions:
         return ''
     title = matches.match_title(match, definition_for(match).name)
-    return f'{" ".join(mentions)} It is your turn in {title}.'
+    return f'{" ".join(mentions)} The table is waiting for you in {title}.'
 
 
 def _display_name(interaction: discord.Interaction) -> str:

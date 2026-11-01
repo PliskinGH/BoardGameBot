@@ -8,12 +8,14 @@ from django.test import SimpleTestCase
 from games import registry
 from bgb_engine.base import GameDefinition, IllegalAction, Transition
 from games.services.reveals import tokens
+from tests.games.pending_game import PendingReactionGame
 from tests.support import Table, seats
 
 
 class GameContractTests(SimpleTestCase):
     def games(self):
-        return registry.available()
+        return {**registry.available(),
+                PendingReactionGame.slug: PendingReactionGame()}
 
     def test_every_definition_satisfies_the_protocol(self):
         self.assertTrue(self.games())
@@ -56,14 +58,15 @@ class GameContractTests(SimpleTestCase):
                 table = Table(definition, seats(definition.min_players),
                               seed=11)
                 self.assertFalse(definition.is_over(table.context()))
-                self.assertTrue(table.legal_actions(table.active))
                 for _ in range(500):
                     if table.over():
                         break
-                    option = table.legal_actions(table.active)[0]
+                    actor = table.next_actor()
+                    self.assertIsNotNone(actor)
+                    option = table.legal_actions(actor)[0]
                     params = {param.key: param.options[0]
                               for param in option.params if param.options}
-                    transition = table.apply(option.id, params)
+                    transition = table.apply(option.id, params, actor=actor)
                     self.assertIsInstance(transition, Transition)
                     json.dumps(transition.state)
                 else:
@@ -116,13 +119,27 @@ class GameContractTests(SimpleTestCase):
                 self.assertEqual(first.state, second.state)
                 self.assertEqual(first.private, second.private)
 
+    def test_a_pending_non_active_seat_can_act(self):
+        table = Table(PendingReactionGame(), seats(2), seed=5)
+        table.apply('open')
+
+        self.assertEqual(table.pending[0].seat, 1)
+        self.assertIn(1, table.needed_seats)
+        self.assertEqual(table.next_actor(), 1)
+        self.assertEqual(table.legal_actions(1)[0].id, 'react')
+
+        table.apply('react', {'answer': 'accept'}, actor=1)
+        self.assertEqual(table.pending, ())
+        self.assertEqual(table.active, 0)
+
     def _script(self, definition):
         table = Table(definition, seats(definition.min_players), seed=5)
         for _ in range(50):
             if table.over():
                 break
-            option = table.legal_actions(table.active)[0]
+            actor = table.next_actor()
+            option = table.legal_actions(actor)[0]
             params = {param.key: param.options[0]
                       for param in option.params if param.options}
-            table.apply(option.id, params)
+            table.apply(option.id, params, actor=actor)
         return table

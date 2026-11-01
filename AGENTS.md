@@ -99,6 +99,7 @@ The test runner builds and drops a test database from the migration files. `test
 - `tests/games/test_contract.py` runs every registered game through setup reproducibility, JSON shapes, legal actions, visibility and deterministic replay.
 - A match stores the rules version it was created with; actions refuse to run under other rules, and `upgrade_match` rebuilds a match before start or asks an `UpgradableRules` definition to migrate it in flight.
 - Games are installed as entry points in the `boardgamebot.games` group. `games.plugins` validates instances, classes and zero-argument factories; `GamesConfig.ready()` registers them. There is no static built-in game list.
+- A non-active seat may act only while it has an open pending choice. Its definition returns those actions from `legal_actions`; while a choice is open, only its seat is needed, and otherwise the active seat is needed.
 - `bgb_engine.examples.card_sample` is `CardSampleGame`: hands, a hidden deck, counters, phases, a pending choice and a reveal/undo path.
 - `bgb_engine.examples.grid_sample` is `GridSampleGame`: a 7×7 board, secret caches, unmarked objective starts, and the grid renderer it feeds on the web.
 - The engine package is published separately as `bgb-engine`; `bgb_engine` must not import Django, Discord or the host application.

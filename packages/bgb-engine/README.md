@@ -43,7 +43,9 @@ refuses duplicate slugs.
 
 A non-active seat may act only while it holds an open pending choice. Return
 that seat's legal actions from `legal_actions` and open the choice with a
-`PendingSpec` in a transition.
+`PendingSpec` in a transition. While a choice is open, the host treats only its
+seat as needed for board replacement, pings and private panels; otherwise the
+active seat is needed.
 
 ## License
 

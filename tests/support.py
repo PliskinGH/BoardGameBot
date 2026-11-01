@@ -38,6 +38,21 @@ class Table:
                        seats=self.seats, phase=self.phase,
                        active=self.active, pending=self.pending)
 
+    @property
+    def needed_seats(self):
+        """Return pending seats first, then the active seat."""
+        positions = [choice.seat for choice in self.pending]
+        if self.active is not None:
+            positions.append(self.active)
+        return tuple(dict.fromkeys(positions))
+
+    def next_actor(self):
+        """Return the first needed seat with a legal action."""
+        for position in self.needed_seats:
+            if self.legal_actions(position):
+                return position
+        return self.active
+
     def legal_actions(self, actor=None):
         return self.definition.legal_actions(
             self.context(), self.active if actor is None else actor)

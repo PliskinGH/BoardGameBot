@@ -72,3 +72,4 @@ class LoaderTests(SimpleTestCase):
         names = {entry_point.name for entry_point in plugins.entry_points()}
         self.assertIn('card-sample', names)
         self.assertIn('grid-sample', names)
+        self.assertIn('graph-sample', names)

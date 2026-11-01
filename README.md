@@ -12,7 +12,7 @@ A Discord bot for asynchronous, turn-based board games, with a web page that sho
 
 ## Engine package
 
-The game engine is the separate MIT package [`bgb-engine`](packages/bgb-engine).
+The game engine is the separate MIT package [`bgb-engine`](packages/bgb-engine). Game authors can follow the [Writing a Game guide](docs/writing-a-game.md).
 
 ## Discord commands
 
@@ -144,27 +144,9 @@ Restart both processes afterwards.
 
 ## Sample Games
 
-The release ships two example games.
+BoardGameBot includes three original sample games: Card Sample Game, Grid Sample Game and Graph Sample Game. Their purpose is to test the bot and provide references for game authors. They are not adaptations of any published game.
 
-### Card Sample Game
-
-- 2 to 4 players, three cards each, a deck of numbers 0–5 and one Swap card per cycle.
-- On your turn, play a card: a number adds its value to your coins; Swap exchanges your coin total with another seat.
-- Draw one card; the highest total when the deck and hands are empty wins.
-
-It is an original sample written to exercise the bot, not an adaptation of a published game.
-
-### Grid Sample Game
-
-- Exploration game on 7x7 grid for 2 to 4 players.
-- Each player has one meeple, starting on their own objective cell.
-- On your turn, move one orthogonal step into a free cell, Scout, or Pass.
-- Moving into a face-down cell reveals it: nothing, a cache (+2 supply), or an objective (its owner scores +3 at the end, whoever reveals it). Every newly revealed cell gives the mover +1 explored; moving into an already revealed cell gives nothing.
-- Scout an adjacent, unrevealed, free cell to place a cache there, face down, without looking at what was there. It may have been nothing, a cache, or an objective; a scouted objective is destroyed.
-- The game ends after 14 rounds or when every cell is revealed. Score = explored + supply + objective bonuses.
-- The grid is shown on the web page; Discord shows the counters and offers the move choices.
-
-It is also an original sample, not an adaptation of a published game.
+See the [sample games rules](docs/sample-games.md).
 
 ## License
 

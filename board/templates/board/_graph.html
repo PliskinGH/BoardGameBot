@@ -1,0 +1,42 @@
+{% load i18n %}
+<div class="board-graph mb-3">
+  <svg class="board-graph-svg" viewBox="{{ graph.view_box }}"
+       role="img" aria-label="{% translate 'Board' %}">
+    <g class="board-graph-edges">
+      {% for edge in graph.edges %}
+      <line class="board-graph-edge{% if edge.kind %} kind-{{ edge.kind }}{% endif %}{% for owner in edge.owners %} owner-{{ owner }}{% endfor %}"
+            x1="{{ edge.x1 }}" y1="{{ edge.y1 }}"
+            x2="{{ edge.x2 }}" y2="{{ edge.y2 }}">
+        {% if edge.label %}<title>{{ edge.label }}</title>{% endif %}
+      </line>
+      {% if edge.label %}
+      <text class="board-graph-edge-label"
+            x="{{ edge.label_x }}" y="{{ edge.label_y }}">{{ edge.label }}</text>
+      {% endif %}
+      {% endfor %}
+    </g>
+    <g class="board-graph-nodes">
+      {% for node in graph.nodes %}
+      <g class="board-graph-node{% if node.kind %} kind-{{ node.kind }}{% endif %}">
+        <circle cx="{{ node.x }}" cy="{{ node.y }}" r="24">
+          {% if node.label %}<title>{{ node.label }}</title>{% endif %}
+        </circle>
+        {% if node.label %}
+        <text class="board-graph-node-label"
+              x="{{ node.x }}" y="{{ node.y }}">{{ node.label }}</text>
+        {% endif %}
+        {% for token in node.tokens %}
+        <g class="board-graph-token token-owner-{{ token.owner }}">
+          <circle cx="{{ token.x }}" cy="{{ token.y }}" r="12">
+            {% if token.label %}<title>{{ token.label }}</title>{% endif %}
+          </circle>
+          {% if token.label %}
+          <text x="{{ token.x }}" y="{{ token.y }}">{{ token.label }}</text>
+          {% endif %}
+        </g>
+        {% endfor %}
+      </g>
+      {% endfor %}
+    </g>
+  </svg>
+</div>

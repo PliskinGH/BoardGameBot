@@ -2,7 +2,8 @@
 
 from django.test import SimpleTestCase
 
-from bgb_engine.examples import CardSampleGame, GridSampleGame
+from bgb_engine.examples import (CardSampleGame, GraphSampleGame,
+                                 GridSampleGame)
 from games import plugins, registry
 
 
@@ -14,10 +15,15 @@ class RegistryTests(SimpleTestCase):
         self.assertIsInstance(registry.get('grid-sample-game'),
                               GridSampleGame)
 
+    def test_the_graph_sample_is_registered(self):
+        self.assertIsInstance(registry.get('graph-sample-game'),
+                              GraphSampleGame)
+
     def test_the_registry_lists_the_installed_games(self):
         available = registry.available()
         self.assertIn('card-sample-game', available)
         self.assertIn('grid-sample-game', available)
+        self.assertIn('graph-sample-game', available)
 
     def test_an_unknown_slug_is_refused(self):
         with self.assertRaises(LookupError):

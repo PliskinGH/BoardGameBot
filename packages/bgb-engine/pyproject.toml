@@ -36,6 +36,7 @@ dependencies = []
 [project.entry-points."boardgamebot.games"]
 card-sample = "bgb_engine.examples.card_sample:CardSampleGame"
 grid-sample = "bgb_engine.examples.grid_sample:GridSampleGame"
+graph-sample = "bgb_engine.examples.graph_sample:GraphSampleGame"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/bgb_engine"]

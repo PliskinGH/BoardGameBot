@@ -258,6 +258,18 @@ class GridBoardTests(TestCase):
         self.assertNotContains(response, 'board-grid')
 
 
+class GraphBoardTests(TestCase):
+    def test_a_graph_match_renders_its_board(self):
+        match, players = started_match(slug='graph-sample-game')
+        self.client.force_login(players[0])
+
+        response = self.client.get(match_url(match))
+
+        self.assertContains(response, 'board-graph')
+        self.assertContains(response, 'Graph Sample Game')
+        self.assertNotContains(response, 'board-grid')
+
+
 class MatchStateTests(TestCase):
     def setUp(self):
         self.match, self.players = started_match()

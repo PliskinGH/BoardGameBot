@@ -2,9 +2,19 @@
 
 An engine for asynchronous, turn-based board games played through Discord.
 
-It provides the game contract, board and card primitives, deterministic
-randomness, pending-choice lookups and reference games. It has no Django,
-Discord or web dependency.
+It has no Django, Discord or web dependency.
+
+## Features
+
+- A game contract for setup, actions, transitions, rendering, scoring and rules upgrades.
+- Turn-based play with pending choices and out-of-turn reactions.
+- Public, hidden and per-seat private state.
+- Deterministic seeded replay.
+- Cards, zones, counters and turn order.
+- Grid boards.
+- Graph boards.
+- Installable game plugins.
+- Card, Grid and Graph reference games.
 
 ## Install
 
@@ -21,11 +31,21 @@ from bgb_engine import GameDefinition, RenderModel
 The reference games live in `bgb_engine.examples`:
 
 ```python
-from bgb_engine.examples import CardSampleGame, GridSampleGame
+from bgb_engine.examples import (CardSampleGame, GraphSampleGame,
+                                GridSampleGame)
 ```
 
 They are also installed as plugins for BoardGameBot through the
 `boardgamebot.games` entry-point group.
+
+## Reference games
+
+- `CardSampleGame`: card hands, hidden state, counters and pending choices.
+- `GridSampleGame`: a grid board with hidden cells and scoring.
+- `GraphSampleGame`: a graph board with paths, tokens and a finish condition.
+
+The rules for the reference games are in the main project documentation. A
+complete authoring guide is in the repository at `docs/writing-a-game.md`.
 
 ## Write a game
 

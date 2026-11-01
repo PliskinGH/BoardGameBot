@@ -110,3 +110,115 @@
 .board-cell.token-owner-3 .board-token {
   background: #c0392b;
 }
+
+/* Graph boards, as shown by games that render a GraphView. */
+.board-graph {
+  max-width: 48rem;
+}
+
+.board-graph-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  border-radius: .5rem;
+  background: #f8f9fa;
+}
+
+.board-graph-edge {
+  stroke: #adb5bd;
+  stroke-width: 3;
+}
+
+.board-graph-edge.kind-path {
+  stroke: #6c757d;
+}
+
+.board-graph-edge.owner-0,
+.board-graph-edge.owner-1,
+.board-graph-edge.owner-2,
+.board-graph-edge.owner-3 {
+  stroke-width: 5;
+}
+
+.board-graph-edge.owner-0 {
+  stroke: #5865f2;
+}
+
+.board-graph-edge.owner-1 {
+  stroke: #e67e22;
+}
+
+.board-graph-edge.owner-2 {
+  stroke: #2e9e5b;
+}
+
+.board-graph-edge.owner-3 {
+  stroke: #c0392b;
+}
+
+.board-graph-edge-label,
+.board-graph-node-label,
+.board-graph-token text {
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+.board-graph-edge-label {
+  fill: #495057;
+  font-size: 12px;
+}
+
+.board-graph-node circle {
+  fill: #fff;
+  stroke: #495057;
+  stroke-width: 2;
+}
+
+.board-graph-node.kind-start circle {
+  fill: #e7f1ff;
+}
+
+.board-graph-node.kind-mid circle {
+  fill: #fff3cd;
+}
+
+.board-graph-node.kind-finish circle {
+  fill: #d1e7dd;
+  stroke-width: 3;
+}
+
+.board-graph-node-label {
+  fill: #212529;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.board-graph-token circle {
+  fill: #6c757d;
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+.board-graph-token text {
+  fill: #fff;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.board-graph-token.token-owner-0 circle {
+  fill: #5865f2;
+}
+
+.board-graph-token.token-owner-1 circle {
+  fill: #e67e22;
+}
+
+.board-graph-token.token-owner-2 circle {
+  fill: #2e9e5b;
+}
+
+.board-graph-token.token-owner-3 circle {
+  fill: #c0392b;
+}

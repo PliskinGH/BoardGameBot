@@ -12,7 +12,7 @@ from games.services.log import WEB_LIMIT
 from games.services.matches import match_title
 from games.services.projections import render_model, summary
 
-from .renderers import grid, log, seats, standings, zones
+from .renderers import graph, grid, log, seats, standings, zones
 
 
 def current_player(request: HttpRequest) -> Player | None:
@@ -51,6 +51,7 @@ def state_context(match: Match, player: Player | None,
         'is_finished': finished,
         'setup_seats': seats.setup_rows(match),
         'seats': seats.rows(model),
+        'graph': graph.rows(model),
         'grid': grid.rows(model),
         'zones': zones.rows(model),
         'standings': (standings.rows(summary(match, player))

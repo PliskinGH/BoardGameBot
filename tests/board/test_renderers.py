@@ -6,10 +6,11 @@ from django.template.loader import render_to_string
 from django.test import SimpleTestCase, TestCase
 from django.utils import translation
 
-from board.renderers import grid, seats, standings, zones
+from board.renderers import graph, grid, seats, standings, zones
 from games.services import log
-from bgb_engine.base import (CardView, CellView, GridView, RenderModel,
-                               SeatView, TokenView, ZoneView)
+from bgb_engine.base import (CardView, CellView, GraphEdgeView, GraphNodeView,
+                             GraphView, GridView, RenderModel, SeatView,
+                             TokenView, ZoneView)
 from games.services import undo
 from games.services.matches import close_match
 from tests.factories import play_first, started_match
@@ -87,6 +88,86 @@ class GridRowTests(SimpleTestCase):
         self.assertIn('kind-cache', html)
         self.assertIn('board-token', html)
         self.assertIn('token-owner-0', html)
+
+
+class GraphRowTests(SimpleTestCase):
+    def model(self, nodes, edges=(), tokens=()):
+        return RenderModel(board=GraphView(nodes=nodes, edges=edges,
+                                           tokens=tokens))
+
+    def test_a_model_without_a_graph_has_no_rows(self):
+        self.assertIsNone(graph.rows(RenderModel()))
+
+    def test_a_graph_keeps_nodes_edges_and_tokens(self):
+        model = self.model(
+            (GraphNodeView('a', 'A', 0, 0, 'start'),
+             GraphNodeView('b', 'B', 10, 0, 'finish')),
+            (GraphEdgeView('a', 'b', kind='path', label='road',
+                           owners=(0,)),),
+            (TokenView('a', '1', 0),))
+
+        rows = graph.rows(model)
+
+        self.assertEqual(rows['view_box'], '0 0 1000 700')
+        self.assertEqual(len(rows['nodes']), 2)
+        self.assertEqual(rows['nodes'][0]['kind'], 'start')
+        self.assertEqual(rows['nodes'][1]['x'], 930.0)
+        self.assertEqual(rows['nodes'][0]['tokens'][0]['label'], '1')
+        self.assertEqual(rows['edges'][0]['label'], 'road')
+        self.assertEqual(rows['edges'][0]['owners'], (0,))
+
+    def test_a_single_position_uses_a_circular_fallback(self):
+        model = self.model((GraphNodeView('a', 'A'), GraphNodeView('b', 'B')))
+
+        rows = graph.rows(model)
+
+        self.assertNotEqual((rows['nodes'][0]['x'], rows['nodes'][0]['y']),
+                            (rows['nodes'][1]['x'], rows['nodes'][1]['y']))
+
+    def test_duplicate_and_unknown_edges_are_dropped(self):
+        model = self.model(
+            (GraphNodeView('a', 'A', 0, 0), GraphNodeView('b', 'B', 1, 1)),
+            (GraphEdgeView('a', 'b'), GraphEdgeView('b', 'a'),
+             GraphEdgeView('a', 'missing')))
+
+        self.assertEqual(len(graph.rows(model)['edges']), 1)
+
+    def test_the_graph_template_renders_svg_markup(self):
+        model = self.model(
+            (GraphNodeView('a', 'A', 0, 0, 'start'),
+             GraphNodeView('b', 'B', 10, 0, 'finish')),
+            (GraphEdgeView('a', 'b', kind='path'),),
+            (TokenView('a', '1', 0),))
+
+        html = render_to_string('board/_graph.html', {
+            'graph': graph.rows(model)})
+
+        self.assertIn('board-graph', html)
+        self.assertIn('board-graph-edge', html)
+        self.assertIn('kind-start', html)
+        self.assertIn('kind-finish', html)
+        self.assertIn('token-owner-0', html)
+
+    def test_the_state_includes_a_graph_only_when_there_is_one(self):
+        model = RenderModel(
+            board=GraphView(nodes=(
+                GraphNodeView('a', 'A', 0, 0),
+                GraphNodeView('b', 'B', 1, 1),
+            )), status='Playing.')
+        html = render_to_string('board/_state.html', {
+            'model': model, 'version': 1, 'state_url': '/state/',
+            'seats': [], 'zones': [], 'log': [], 'is_setup': False,
+            'graph': graph.rows(model), 'grid': None})
+
+        self.assertIn('board-graph', html)
+        self.assertNotIn('board-grid', html)
+
+        html = render_to_string('board/_state.html', {
+            'model': RenderModel(status='Playing.'), 'version': 1,
+            'state_url': '/state/', 'seats': [], 'zones': [], 'log': [],
+            'is_setup': False, 'graph': None, 'grid': None})
+
+        self.assertNotIn('board-graph', html)
 
 
 class StandingsRowTests(SimpleTestCase):

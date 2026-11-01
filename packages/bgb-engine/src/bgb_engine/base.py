@@ -208,6 +208,8 @@ class GraphEdgeView:
     source: str
     target: str
     kind: str = ''
+    label: str = ''
+    owners: tuple[int, ...] = ()
 
 
 @dataclass(frozen=True)

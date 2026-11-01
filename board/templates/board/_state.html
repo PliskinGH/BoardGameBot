@@ -18,7 +18,7 @@
   </ul>
   {% else %}
   <p class="lead">{{ model.status }}</p>
-  {% if grid %}{% include 'board/_grid.html' %}{% endif %}
+  {% if graph %}{% include 'board/_graph.html' %}{% elif grid %}{% include 'board/_grid.html' %}{% endif %}
   {% include 'board/_seats.html' %}
   {% if is_finished %}{% include 'board/_standings.html' %}{% endif %}
   {% endif %}
